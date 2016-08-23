@@ -6,6 +6,7 @@ copy = require 'gulp-copy'
 zip = require 'gulp-zip'
 flatten = require 'gulp-flatten'
 clean = require 'gulp-clean'
+ghPages = require 'gulp-gh-pages'
 
 config =
   dest: 'release'
@@ -41,13 +42,14 @@ gulp.task 'copy', ['clean'], () ->
       .src('**/*.*', {cwd: 'tech'})
       .pipe(copy(config.dest))
 
-gulp.task 'archive-release',  () ->
+gulp.task 'release', ['compile'], () ->
   return gulp
-      .src([config.dest])
-      .pipe(zip('release.zip'))
-      .pipe(gulp.dest('.'))
-
+      .src(config.dest)
+      .pipe(ghPages())
 
 # gulp.task 'default', ['clean', 'compile', 'copy', 'archive-release']
 gulp.task 'default', ['copy'], () ->
   gulp.start 'compile'
+
+gulp.task 'deploy', ['copy'], () ->
+  gulp.start 'release'
