@@ -1,4 +1,0 @@
-#base=js
-
-libs/plugins.js
-mainbundle.js
